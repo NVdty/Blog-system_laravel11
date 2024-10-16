@@ -1,47 +1,26 @@
 <?php
 
-Namespace App\Models;
-use Illuminate\Support\Arr;
+namespace App\Models;
 
+use App\Models\User;
+use App\Models\Category;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-
-
-class Post
+class Post extends Model
 {
-    public static function all()
+    use HasFactory;
+    protected $fillable = ['title','author', 'slug', 'body'];
+
+
+    public function author(): BelongsTo
     {
-        return [
-            [
-                'id' => '1',
-                'slug' => 'judul-artikel-1',
-                'title' => 'Judul Artikel 1',
-                'author' => 'nvdty',
-                'body' => ' Lorem ipsum, dolor sit amet consectetur adipisicing elit. Minima voluptas id, incidunt cum beatae in!
-                Dolorem placeat harum inventore quibusdam eaque nisi aut adipisci. Corrupti accusantium velit molestias est
-                nisi.'
-            ],
-            [
-                'id' => '2',
-                'slug' => 'judul-artikel-2',
-                'title' => 'Judul Artikel 2',
-                'author' => 'nvdtyaaa',
-                'body' => ' Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda at sit numquam vero non officiis delectus
-                voluptas, repellat magni corrupti! Officiis ea vero assumenda eum eligendi consectetur praesentium corporis
-                libero!'
-            ],
-        ];
+        return $this->belongsTo(User::class);
     }
 
-    public static function find($slug)
+    public function category(): BelongsTo
     {
-        // return Arr::first(static::all(), function ($post) use ($slug){
-        //     return $post['slug'] == $slug;
-        // });
-        $post = Arr::first(static::all(), fn ($post) => $post['slug'] == $slug);
-
-        if (!$post){
-            abort(404);
-        }
-        return $post;
+        return $this->belongsTo(Category::class);
     }
 }
