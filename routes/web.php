@@ -12,15 +12,17 @@ Route::get('/', function () {
     return view('home', ['title'=>'Homepage']);
 });
 
-//blog
-Route::get('/posts', function () {
-    return view('posts', ['title' => 'Blog','posts' => Post::all()]);
+Route::get('/posts', function(){
+
+    return view ('posts', ['title' => 'Blog', 'posts' => Post::filter(request(['search','category', 'author']))->latest()->paginate(9)]);
+
 });
 
 Route::get('/posts/{post:slug}', function (Post $post){
 
     return view ('post', ['title' => 'Single Post', 'post' => $post]);
 });
+
 Route::get('/posts/{post:slug}', function (Post $post){
 
     return view ('post', ['title' => 'Single Post', 'post' => $post]);
